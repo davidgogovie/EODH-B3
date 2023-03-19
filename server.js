@@ -4,10 +4,16 @@ global.osPlatform = process.platform
 // const env = require('./config/index')
 // console.log(env.url_local_server)
 
+const cors = require('cors')
+const path = require('path')
+
 const jsonServer = require("json-server");
 const server = jsonServer.create();
-const router = jsonServer.router("data/db.json");
+// const router = jsonServer.router("data/db.json");
+const router = jsonServer.router(path.join(__dirname, 'data/db.json'))
 const middlewares = jsonServer.defaults();
+server.use(cors())
+server.use(jsonServer.bodyParser)
 server.use(middlewares);
 server.use(router);
 server.listen(process.env.DATABASE_PORT || 8001, () => {
@@ -26,7 +32,6 @@ const fs = require('fs')
 // express app
 const app = express()
 
-const path = require('path')
 app.use(express.static(path.join(__dirname + "public")))
 
 // middleware
